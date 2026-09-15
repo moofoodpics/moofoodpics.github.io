@@ -18,7 +18,7 @@ export default function Home(){
  const current=reviews.find(r=>r.id===selected);
  useEffect(()=>{setPhoto(null)},[selected]);
  useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.key==='Escape'){if(photo!==null)setPhoto(null);else{setSelected(null);setAbout(false)}}if(photo!==null&&current){if(e.key==='ArrowRight')setPhoto((photo+1)%current.images.length);if(e.key==='ArrowLeft')setPhoto((photo+current.images.length-1)%current.images.length)}};document.addEventListener('keydown',key);return()=>document.removeEventListener('keydown',key)},[photo,current]);
- const changeCity=(id:string)=>{setCityId(id);setSelected(null);setMobileFilters(false);setListOpen(!window.matchMedia('(max-width: 700px)').matches)};
+ const changeCity=(id:string)=>{setCityId(id);setQuery('');setCategory('All');setFilter('All');setSelected(null);setMobileFilters(false);setListOpen(!window.matchMedia('(max-width: 700px)').matches)};
  const location=(r:Review)=>cities.find(c=>c.id===r.city)?.name||r.country;
  return <main className={`food-world ${current?'has-review':listOpen?'has-index':''}`}><FoodMap city={city} restaurants={local} selected={selected} onSelect={id=>{setSelected(id);setMobileFilters(false)}}/>
  <header className="map-header"><a href="/" className="brand" aria-label="moofoodpics home">moofoodpics</a></header>

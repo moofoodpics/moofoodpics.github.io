@@ -22,11 +22,12 @@ export default function FoodMap({restaurants,selected,onSelect,city}:{restaurant
  m.addSource('reviews',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:38});
  m.addLayer({id:'clusters',type:'circle',source:'reviews',filter:['has','point_count'],paint:{'circle-color':'#f5f3ec','circle-radius':18,'circle-stroke-color':'#a6553e','circle-stroke-width':1}});
  m.addLayer({id:'cluster-count',type:'symbol',source:'reviews',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Regular'],'text-size':11},paint:{'text-color':'#a6553e'}});
+ m.addLayer({id:'review-touch-targets',type:'circle',source:'reviews',filter:['!', ['has','point_count']],paint:{'circle-radius':18,'circle-color':'#a6553e','circle-opacity':0}});
  m.addLayer({id:'review-dots',type:'circle',source:'reviews',filter:['!', ['has','point_count']],paint:{'circle-radius':5,'circle-color':'#a6553e','circle-stroke-color':'#f5f3ec','circle-stroke-width':2}});
  m.addLayer({id:'review-labels',type:'symbol',source:'reviews',filter:['!', ['has','point_count']],layout:{'text-field':['get','label'],'text-font':['Noto Sans Regular'],'text-size':12,'text-anchor':'left','text-offset':[.9,0],'text-max-width':16,'text-optional':true},paint:{'text-color':'#653d31','text-halo-color':'#f5f3ec','text-halo-width':2}});
- for(const layer of ['review-dots','review-labels'])m.on('click',layer,e=>{const id=e.features?.[0]?.properties?.id;if(id)selectRef.current(String(id))});
+ for(const layer of ['review-touch-targets','review-dots','review-labels'])m.on('click',layer,e=>{const id=e.features?.[0]?.properties?.id;if(id)selectRef.current(String(id))});
  m.on('click','clusters',async e=>{const f=e.features?.[0];if(!f||f.geometry.type!=='Point')return;const zoom=await (m.getSource('reviews') as GeoJSONSource).getClusterExpansionZoom(Number(f.properties?.cluster_id));if(!cancelled)m.easeTo({center:f.geometry.coordinates as [number,number],zoom:Math.min(zoom,15.5),duration:duration()})});
- for(const layer of ['review-dots','review-labels','clusters']){m.on('mouseenter',layer,()=>m.getCanvas().style.cursor='pointer');m.on('mouseleave',layer,()=>m.getCanvas().style.cursor='')}
+ for(const layer of ['review-touch-targets','review-dots','review-labels','clusters']){m.on('mouseenter',layer,()=>m.getCanvas().style.cursor='pointer');m.on('mouseleave',layer,()=>m.getCanvas().style.cursor='')}
  setReady(true);setError(false);m.once('idle',()=>{finish('tiles');clearTimeout(timeout)});
  });m.on('error',()=>setError(true));const observer=new ResizeObserver(()=>m.resize());observer.observe(container.current);clean=()=>{observer.disconnect();m.remove();map.current=null};
  }).catch(()=>{setError(true);setSlow(true)});return()=>{cancelled=true;clearTimeout(timeout);clearTimeout(dismiss);clean()};},[]);

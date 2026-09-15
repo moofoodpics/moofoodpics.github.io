@@ -1,0 +1,37 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import type {Map as AtlasMap,GeoJSONSource} from 'maplibre-gl';
+import type {FeatureCollection} from 'geojson';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
+import type {Review,City} from './types';
+export default function FoodMap({restaurants,selected,onSelect,city}:{restaurants:Review[];selected:string|null;onSelect:(id:string)=>void;city:City}){
+ const container=useRef<HTMLDivElement>(null),map=useRef<AtlasMap|null>(null),selectRef=useRef(onSelect);selectRef.current=onSelect;
+ const[ready,setReady]=useState(false),[progress,setProgress]=useState(1),[loading,setLoading]=useState(true),[slow,setSlow]=useState(false),[error,setError]=useState(false),[plan,setPlan]=useState(false);
+ const homeRef=useRef(city);homeRef.current=city;
+ const duration=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:1100;
+ useEffect(()=>{let cancelled=false;let clean=()=>{};let dismiss:ReturnType<typeof setTimeout>;const completed=new Set<string>();
+ const finish=(step:string)=>{if(cancelled)return;completed.add(step);setProgress(Math.round(completed.size/4*100));if(completed.size===4)dismiss=setTimeout(()=>setLoading(false),300)};
+ const timeout=setTimeout(()=>{if(!cancelled)setSlow(true)},18000);document.fonts.ready.then(()=>finish('fonts'));
+ import('maplibre-gl').then(L=>{if(cancelled||!container.current)return;finish('engine');L.setWorkerUrl(workerUrl);
+ const m=new L.Map({container:container.current,style:'/atlas-style.json',center:homeRef.current.center as [number,number],zoom:homeRef.current.zoom,pitch:42,bearing:-16,minZoom:2,maxZoom:15.5,maxPitch:52,canvasContextAttributes:{antialias:true},attributionControl:false});map.current=m;
+ m.addControl(new L.NavigationControl({showCompass:true,visualizePitch:true}),'bottom-right');m.addControl(new L.AttributionControl({compact:true}),'bottom-right');
+ m.on('load',()=>{finish('style');m.setLight({anchor:'viewport',color:'#fff8e8',intensity:.35,position:[1.15,210,40]});
+ const before=m.getStyle().layers?.find(l=>l.type==='symbol')?.id;
+ m.addLayer({id:'city-buildings',type:'fill-extrusion',source:'openmaptiles','source-layer':'building',minzoom:11,paint:{'fill-extrusion-color':'#dfd9c9','fill-extrusion-height':['min',120,['coalesce',['get','render_height'],6]],'fill-extrusion-base':0,'fill-extrusion-opacity':.92}},before);
+ m.addSource('reviews',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:38});
+ m.addLayer({id:'clusters',type:'circle',source:'reviews',filter:['has','point_count'],paint:{'circle-color':'#f5f3ec','circle-radius':18,'circle-stroke-color':'#a6553e','circle-stroke-width':1}});
+ m.addLayer({id:'cluster-count',type:'symbol',source:'reviews',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Regular'],'text-size':11},paint:{'text-color':'#a6553e'}});
+ m.addLayer({id:'review-dots',type:'circle',source:'reviews',filter:['!', ['has','point_count']],paint:{'circle-radius':5,'circle-color':'#a6553e','circle-stroke-color':'#f5f3ec','circle-stroke-width':2}});
+ m.addLayer({id:'review-labels',type:'symbol',source:'reviews',filter:['!', ['has','point_count']],layout:{'text-field':['get','label'],'text-font':['Noto Sans Regular'],'text-size':12,'text-anchor':'left','text-offset':[.9,0],'text-max-width':16,'text-optional':true},paint:{'text-color':'#653d31','text-halo-color':'#f5f3ec','text-halo-width':2}});
+ for(const layer of ['review-dots','review-labels'])m.on('click',layer,e=>{const id=e.features?.[0]?.properties?.id;if(id)selectRef.current(String(id))});
+ m.on('click','clusters',async e=>{const f=e.features?.[0];if(!f||f.geometry.type!=='Point')return;const zoom=await (m.getSource('reviews') as GeoJSONSource).getClusterExpansionZoom(Number(f.properties?.cluster_id));if(!cancelled)m.easeTo({center:f.geometry.coordinates as [number,number],zoom:Math.min(zoom,15.5),duration:duration()})});
+ for(const layer of ['review-dots','review-labels','clusters']){m.on('mouseenter',layer,()=>m.getCanvas().style.cursor='pointer');m.on('mouseleave',layer,()=>m.getCanvas().style.cursor='')}
+ setReady(true);setError(false);m.once('idle',()=>{finish('tiles');clearTimeout(timeout)});
+ });m.on('error',()=>setError(true));const observer=new ResizeObserver(()=>m.resize());observer.observe(container.current);clean=()=>{observer.disconnect();m.remove();map.current=null};
+ }).catch(()=>{setError(true);setSlow(true)});return()=>{cancelled=true;clearTimeout(timeout);clearTimeout(dismiss);clean()};},[]);
+ useEffect(()=>{if(!ready||!map.current)return;const data:FeatureCollection={type:'FeatureCollection',features:restaurants.filter(r=>r.coords).map(r=>({type:'Feature',properties:{id:r.id,label:`${r.name}${r.score?'  ·  '+r.score:''}`},geometry:{type:'Point',coordinates:[r.coords![1],r.coords![0]]}}))};(map.current.getSource('reviews') as GeoJSONSource).setData(data)},[ready,restaurants]);
+ useEffect(()=>{if(!ready)return;setPlan(false);map.current?.flyTo({center:city.center as [number,number],zoom:city.zoom,pitch:42,bearing:-16,duration:duration(),essential:false})},[city,ready]);
+ useEffect(()=>{if(!ready||!selected)return;const r=restaurants.find(r=>r.id===selected);if(r?.coords)map.current?.easeTo({center:[r.coords[1],r.coords[0]],zoom:14.1,offset:window.innerWidth>700?[145,0]:[0,-70],duration:duration()})},[selected,ready,restaurants]);
+ return <><div ref={container} className="full-map" aria-label={`Interactive three-dimensional food map of ${city.name}`}/><div className="scene-controls"><div className="view-switch"><button aria-pressed={!plan} onClick={()=>{setPlan(false);map.current?.easeTo({pitch:42,bearing:-16,duration:duration()})}}>3D view</button><button aria-pressed={plan} onClick={()=>{setPlan(true);map.current?.easeTo({pitch:0,bearing:0,duration:duration()})}}>From above</button></div><span className="scene-hint">Drag to explore · select a rating</span></div><button className="reset-map" aria-label={`Recenter ${city.name}`} onClick={()=>map.current?.flyTo({center:city.center as [number,number],zoom:city.zoom,pitch:plan?0:42,bearing:plan?0:-16,duration:duration()})}>⌖</button>{loading&&<section className="scene-loading" aria-label="Loading map"><div className="loading-kicker">MOO REVIEWS / FOOD ATLAS</div><h1>Somewhere good.</h1><div className="loading-number" role="progressbar" aria-label="Map loading progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}>{progress}<span>/100</span></div><div className="loading-track"><div style={{width:`${progress}%`}}/></div><p>{progress===100?'Ready to explore.':'Opening the map…'}</p>{slow&&<div className="loading-recovery"><p>The map is taking longer than expected.</p><button onClick={()=>window.location.reload()}>Retry</button><button onClick={()=>setLoading(false)}>Browse reviews</button></div>}</section>}{error&&!loading&&<div className="map-error">Some map tiles are unavailable. Reviews are still accessible in the index.<button onClick={()=>window.location.reload()}>Retry</button></div>}</>;
+}

@@ -1,0 +1,392 @@
+[
+  {
+    "id": "world",
+    "name": "Everywhere",
+    "country": "",
+    "center": [
+      0,
+      25
+    ],
+    "zoom": 2.5
+  },
+  {
+    "id": "san-francisco",
+    "name": "San Francisco",
+    "country": "United States",
+    "center": [
+      -122.435,
+      37.777
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "berkeley",
+    "name": "Berkeley",
+    "country": "United States",
+    "center": [
+      -122.271,
+      37.871
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "oakland",
+    "name": "Oakland",
+    "country": "United States",
+    "center": [
+      -122.27,
+      37.805
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "san-mateo",
+    "name": "San Mateo",
+    "country": "United States",
+    "center": [
+      -122.325,
+      37.563
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "south-bay",
+    "name": "South Bay",
+    "country": "United States",
+    "center": [
+      -122.015,
+      37.365
+    ],
+    "zoom": 11.7
+  },
+  {
+    "id": "orange-county",
+    "name": "Orange County",
+    "country": "United States",
+    "center": [
+      -117.88,
+      33.72
+    ],
+    "zoom": 10.7
+  },
+  {
+    "id": "los-angeles",
+    "name": "Los Angeles",
+    "country": "United States",
+    "center": [
+      -118.32,
+      34.055
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "stockton",
+    "name": "Stockton",
+    "country": "United States",
+    "center": [
+      -121.3,
+      37.96
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "new-york",
+    "name": "New York",
+    "country": "United States",
+    "center": [
+      -73.991,
+      40.738
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "chicago",
+    "name": "Chicago",
+    "country": "United States",
+    "center": [
+      -87.65,
+      41.89
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "kansas-city",
+    "name": "Kansas City",
+    "country": "United States",
+    "center": [
+      -94.584,
+      39.099
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "austin",
+    "name": "Austin",
+    "country": "United States",
+    "center": [
+      -97.743,
+      30.267
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "salt-lake-city",
+    "name": "Salt Lake City",
+    "country": "United States",
+    "center": [
+      -111.88,
+      40.75
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "sonoma",
+    "name": "Sonoma",
+    "country": "United States",
+    "center": [
+      -122.46,
+      38.29
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "san-carlos",
+    "name": "San Carlos",
+    "country": "United States",
+    "center": [
+      -122.26,
+      37.505
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "morro-bay",
+    "name": "Morro Bay",
+    "country": "United States",
+    "center": [
+      -120.849,
+      35.366
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "hawaii",
+    "name": "Hawaii",
+    "country": "United States",
+    "center": [
+      -157.858,
+      21.306
+    ],
+    "zoom": 10.8
+  },
+  {
+    "id": "tokyo",
+    "name": "Tokyo",
+    "country": "Japan",
+    "center": [
+      139.72,
+      35.68
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "osaka",
+    "name": "Osaka",
+    "country": "Japan",
+    "center": [
+      135.501,
+      34.674
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "kyoto",
+    "name": "Kyoto",
+    "country": "Japan",
+    "center": [
+      135.77,
+      35.005
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "nara",
+    "name": "Nara",
+    "country": "Japan",
+    "center": [
+      135.832,
+      34.682
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "kamakura",
+    "name": "Kamakura",
+    "country": "Japan",
+    "center": [
+      139.549,
+      35.319
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "london",
+    "name": "London",
+    "country": "United Kingdom",
+    "center": [
+      -0.106,
+      51.506
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "paris",
+    "name": "Paris",
+    "country": "France",
+    "center": [
+      2.347,
+      48.858
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "madrid",
+    "name": "Madrid",
+    "country": "Spain",
+    "center": [
+      -3.7,
+      40.42
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "barcelona",
+    "name": "Barcelona",
+    "country": "Spain",
+    "center": [
+      2.17,
+      41.385
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "lisbon",
+    "name": "Lisbon",
+    "country": "Portugal",
+    "center": [
+      -9.145,
+      38.721
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "porto",
+    "name": "Porto",
+    "country": "Portugal",
+    "center": [
+      -8.612,
+      41.15
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "douro-valley",
+    "name": "Douro Valley",
+    "country": "Portugal",
+    "center": [
+      -7.55,
+      41.17
+    ],
+    "zoom": 10
+  },
+  {
+    "id": "berlin",
+    "name": "Berlin",
+    "country": "Germany",
+    "center": [
+      13.405,
+      52.517
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "prague",
+    "name": "Prague",
+    "country": "Czech Republic",
+    "center": [
+      14.427,
+      50.083
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "dubrovnik",
+    "name": "Dubrovnik",
+    "country": "Croatia",
+    "center": [
+      18.105,
+      42.646
+    ],
+    "zoom": 13.2
+  },
+  {
+    "id": "zurich",
+    "name": "Zurich",
+    "country": "Switzerland",
+    "center": [
+      8.54,
+      47.372
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "lucerne",
+    "name": "Lucerne",
+    "country": "Switzerland",
+    "center": [
+      8.31,
+      47.05
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "chennai",
+    "name": "Chennai",
+    "country": "India",
+    "center": [
+      80.25,
+      13.06
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "kerala",
+    "name": "Kerala",
+    "country": "India",
+    "center": [
+      76.4,
+      10.1
+    ],
+    "zoom": 9.3
+  },
+  {
+    "id": "tiruchirappalli",
+    "name": "Tiruchirappalli",
+    "country": "India",
+    "center": [
+      78.69,
+      10.79
+    ],
+    "zoom": 13.05
+  },
+  {
+    "id": "abu-dhabi",
+    "name": "Abu Dhabi",
+    "country": "United Arab Emirates",
+    "center": [
+      54.4,
+      24.453
+    ],
+    "zoom": 10.5
+  }
+]
